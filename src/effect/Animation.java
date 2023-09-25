@@ -1,5 +1,8 @@
 package effect;
 
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -151,6 +154,42 @@ public class Animation {
             }
         }
 
+    }
+    private void nextFrame(){
+        if(currentFrame > frameImages.size() - 1){
+            if(isRepeated){
+                currentFrame = 0;
+            }else {
+                currentFrame++;
+            }
+            if(ignoreFrame.get(currentFrame)) nextFrame();
+        }
+    }
+    public boolean isLastFrame(){
+        if(currentFrame == frameImages.size() -1){
+            return true;
+        }else return false;
+    }
+    public void flipAllImage(){
+        for(int i =0; i < frameImages.size(); i++){
+            BufferedImage image = frameImages.get(i).getImage();
+
+            AffineTransform tx = AffineTransform.getScaleInstance(-1,1);
+            tx.translate(-image.getWidth(),0);
+
+            AffineTransformOp op = new AffineTransformOp(tx,
+                    AffineTransformOp.TYPE_BILINEAR);
+            frameImages.get(i).setImage(image);
+
+
+        }
+    }
+    public  void draw(int x, int y, Graphics2D g2){
+        BufferedImage image = getCurrentImage();
+        g2.drawImage(image, x - image.getWidth()/2, y - image.getHeight()/2, null);
+        if(drawRectFrame){
+            g2.drawRect(x - image.getWidth()/2, x - image.getWidth()/2, image.getWidth(), image.getHeight());
+        }
     }
 
 }
