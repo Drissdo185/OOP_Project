@@ -25,5 +25,6 @@ public class GameFrame extends JFrame {
         GameFrame gameframe = new GameFrame();
         gameframe.setVisible(true);
         gameframe.startGame();
+
         }
     }
