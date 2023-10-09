@@ -1,5 +1,6 @@
 package UserInterface;
 import effect.Animation;
+import effect.CacheDataLoader;
 import effect.FrameImage;
 
 import javax.imageio.ImageIO;
@@ -15,26 +16,14 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     private Thread thread;
     private boolean isRunning;
     private InputManager inputManager;
-    FrameImage frame1, frame2, frame3;
-    Animation anim;
+    FrameImage frame1;
+    Animation anim1;
 
 
     public GamePanel() {
         inputManager = new InputManager();
-        try {
-            BufferedImage image = ImageIO.read(new File("data/megasprite.png"));
-            BufferedImage image1 = image.getSubimage(529, 38, 85, 100);
-            frame1 = new FrameImage("frame1", image1);
-            BufferedImage image2 = image.getSubimage(616, 38, 85, 100);
-            frame2 = new FrameImage("frame2", image2);
-            BufferedImage image3 = image.getSubimage(703, 38, 85, 100);
-            frame3 = new FrameImage("frame3", image3);
-
-            anim = new Animation();
-            anim.add(frame1, 500 * 1000000);
-            anim.add(frame2, 500 * 1000000);
-            anim.add(frame3, 500 * 1000000);
-        } catch (IOException ex) {}
+        frame1 = CacheDataLoader.getInstance().getFrameImage("idleshoot1");
+        anim1 = CacheDataLoader.getInstance().getAnimation("runshoot");
     }
 
     @Override
@@ -43,9 +32,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         g.fillRect(0, 0, GameFrame.Screen_width, GameFrame.Screen_height);
 
         Graphics2D g2 = (Graphics2D) g;
-        anim.Update(System.nanoTime());
-        System.out.println("Current Frame: " + anim.getCurrentFrame());
-        anim.draw(100, 100, g2);
+        frame1.draw(130,130,g2);
+
+        anim1.draw(300, 300, g2);
     }
 
     public void startGame() {
@@ -66,6 +55,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         while (isRunning) {
             // Update and Render
 
+            
+            anim1.Update(System.nanoTime());
             repaint();
 
             long detalTime = System.nanoTime() - beginTime; // nanoTime la lay thoi gian he thong

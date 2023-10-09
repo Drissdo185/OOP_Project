@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author phamn
+ 
  */
 public class Animation {
     
